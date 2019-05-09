@@ -1,2 +1,2 @@
 # Tower-defence
-Tower defense made as a Project for a Software design class at Insper
+Tower defense made as a project by Victor Vergara and Ramon Menegatto for a Software design class at Insper
