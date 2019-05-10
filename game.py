@@ -8,8 +8,8 @@ from os import path
 img_dir = path.join(path.dirname(__file__), 'img')
 
 # Dados gerais do jogo.
-WIDTH = 480 # Largura da tela
-HEIGHT = 600 # Altura da tela
+WIDTH = 288 # Largura da tela
+HEIGHT = 288 # Altura da tela
 FPS = 60 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
@@ -19,6 +19,27 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+
+
+
+Mapa=[[0,0,3],
+      [2,0,2],
+      [1,0,0]]
+
+
+
+          
+class Terreno(pygame.sprite.Sprite):
+    def __init__(self,tipo,linha,coluna):
+        
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image = Terrenos[tipo].copy()
+        self.rect = self.image.get_rect()
+        self.rect.x=coluna*96
+        self.rect.y=linha*96
+        
+        
 
 # Classe Jogador que representa a nave
 class Player(pygame.sprite.Sprite):
@@ -52,6 +73,13 @@ pygame.mixer.init()
 
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+Terrenos={
+        0:pygame.image.load(path.join( "percurso.png")).convert(),
+        1:pygame.image.load(path.join( "chao.png")).convert(),
+        2:pygame.image.load(path.join( "agua.png")).convert(),
+        3:pygame.image.load(path.join( "flor.png")).convert()
+        }
+
 
 # Nome do jogo
 pygame.display.set_caption("Navinha")
@@ -60,7 +88,7 @@ pygame.display.set_caption("Navinha")
 clock = pygame.time.Clock()
 
 # Carrega o fundo do jogo
-background = pygame.image.load(path.join( 'agua.png')).convert()
+background=pygame.image.load(path.join( 'agua.png')).convert()
 background_rect = background.get_rect()
 
 
@@ -70,6 +98,13 @@ player = Player()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
+tiles=pygame.sprite.Group()
+for linha in range(len(Mapa)):
+    for coluna in range(len(Mapa[linha])):
+        terreno=Terreno(Mapa[linha][coluna],linha,coluna)
+        tiles.add(terreno)
+
+        
 
 # Comando para evitar travamentos.
 try:
@@ -91,6 +126,7 @@ try:
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
+        tiles.draw(screen)
         all_sprites.draw(screen)
         
         # Depois de desenhar tudo, inverte o display.
