@@ -8,8 +8,8 @@ from os import path
 img_dir = path.join(path.dirname(__file__), 'img')
 
 # Dados gerais do jogo.
-WIDTH = 480 # Largura da tela
-HEIGHT = 480 # Altura da tela
+WIDTH = 160 # Largura da tela
+HEIGHT = 160 # Altura da tela
 FPS = 60 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
@@ -22,12 +22,6 @@ YELLOW = (255, 255, 0)
 
 
 
-Mapa=[[0,0,0,1,2],
-      [2,2,0,0,1],
-      [1,1,1,0,0],
-      [2,1,2,2,0],
-      [0,0,0,0,0]]
-
 
 
           
@@ -38,8 +32,8 @@ class Terreno(pygame.sprite.Sprite):
         
         self.image = Terrenos[tipo].copy()
         self.rect = self.image.get_rect()
-        self.rect.x=coluna*96
-        self.rect.y=linha*96
+        self.rect.x=coluna*32
+        self.rect.y=linha*32
         
         
 
@@ -73,18 +67,30 @@ class Player(pygame.sprite.Sprite):
 pygame.init()
 pygame.mixer.init()
 
+
+Mapa=[[0,0,0,1,3],
+      [1,1,0,0,1],
+      [2,2,1,0,1],
+      [3,2,1,0,1],
+      [3,3,1,0,0]]
+
+
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+agua = pygame.transform.scale(pygame.image.load("agua.png"), [32,32])
+chao = pygame.transform.scale(pygame.image.load("chao.png"), [32,32])
+percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [32,32])
+
 Terrenos={
-        0:pygame.image.load(path.join( "percurso.png")).convert(),
-        1:pygame.image.load(path.join( "chao.png")).convert(),
-        2:pygame.image.load(path.join( "agua.png")).convert(),
+        0:percurso,
+        1:chao,
+        2:agua ,
         3:pygame.image.load(path.join( "flor.png")).convert()
         }
 
 
 # Nome do jogo
-pygame.display.set_caption("Navinha")
+pygame.display.set_caption("Tower Defense")
 
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
