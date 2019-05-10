@@ -8,8 +8,8 @@ from os import path
 img_dir = path.join(path.dirname(__file__), 'img')
 
 # Dados gerais do jogo.
-WIDTH = 288 # Largura da tela
-HEIGHT = 288 # Altura da tela
+WIDTH = 480 # Largura da tela
+HEIGHT = 480 # Altura da tela
 FPS = 60 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
@@ -22,9 +22,11 @@ YELLOW = (255, 255, 0)
 
 
 
-Mapa=[[0,0,3],
-      [2,0,2],
-      [1,0,0]]
+Mapa=[[0,0,0,1,2],
+      [2,2,0,0,1],
+      [1,1,1,0,0],
+      [2,1,2,2,0],
+      [0,0,0,0,0]]
 
 
 
