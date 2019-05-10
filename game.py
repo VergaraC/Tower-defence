@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        player_img = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
+        player_img = pygame.image.load(path.join( "chao.png")).convert()
         self.image = player_img
         
         # Diminuindo o tamanho da imagem.
@@ -60,7 +60,7 @@ pygame.display.set_caption("Navinha")
 clock = pygame.time.Clock()
 
 # Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, 'starfield.png')).convert()
+background = pygame.image.load(path.join( 'agua.png')).convert()
 background_rect = background.get_rect()
 
 
