@@ -23,7 +23,6 @@ YELLOW = (255, 255, 0)
 
 
 
-
           
 class Terreno(pygame.sprite.Sprite):
     def __init__(self,tipo,linha,coluna):
@@ -76,10 +75,13 @@ Mapa=[[0,0,0,1,3],
 
 
 # Tamanho da tela.
+imgX=32
+imgY=32
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-agua = pygame.transform.scale(pygame.image.load("agua.png"), [32,32])
-chao = pygame.transform.scale(pygame.image.load("chao.png"), [32,32])
-percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [32,32])
+agua = pygame.transform.scale(pygame.image.load("agua.png"), [imgX,imgY])
+chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
+percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 
 Terrenos={
         0:percurso,
