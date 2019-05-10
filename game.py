@@ -8,8 +8,8 @@ from os import path
 img_dir = path.join(path.dirname(__file__), 'img')
 
 # Dados gerais do jogo.
-WIDTH = 160 # Largura da tela
-HEIGHT = 160 # Altura da tela
+WIDTH = len(Mapa)*imgX # Largura da tela
+HEIGHT = len(Mapa[1])*imgY # Altura da tela
 FPS = 60 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.image = player_img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player_img, (50, 38))
+        self.image = pygame.transform.scale(player_img, (1, 1))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
