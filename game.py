@@ -51,13 +51,12 @@ class Mob(pygame.sprite.Sprite):
             # Sorteia um lugar inicial em y
             self.rect.y = 16
             # Sorteia uma velocidade inicial
-            self.speedx = 0
-            self.speedy = 0
+            self.speedx = 5
+            self.speedy = 1
             
         def update(self):
            self.rect.x += self.speedx
-           self.rect.y += self.speedy
-        
+           self.rect.y =0
         
 
 # Classe Jogador que representa a nave
