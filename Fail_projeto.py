@@ -59,29 +59,30 @@ class Mob(pygame.sprite.Sprite):
             self.coluna=0
             self.prox_linha=1
             self.prox_col=1
-            self.dx=0
-            self.dy=0
+            
             
         def update(self):
-            
-            if Mapa[self.linha][self.prox_col]==0:
+            dx=0
+            dy=0
+            if Mapa[self.linha][self.coluna+1]==0:
                 self.rect.x+=self.speedx
                 self.rect.y+=0
-                self.dx+=self.speedx
-                if self.dx>=64:
-                    self.coluna=self.prox_col
-                    self.prox_col+=1
-                    self.dx=0
-            elif Mapa[self.prox_linha ][self.coluna]==0:
+                dx+=self.speedx
+                if dx>=64:
+                    self.coluna+=1
+                    dx=0
+                
+            elif Mapa[self.linha + 1][self.coluna]==0:
                 self.rect.x+=0
                 self.rect.y+=self.speedy
-                self.dy+=self.speedy
-                if self.dy>=64:
-                    self.linha=self.prox_linha
-                    self.prox_linha+=1
-                    self.dy=0
+                dy+=self.speedy
+                if dy>=64:
+                    self.linha+=1
+                    dy=0
+
+
                
-               
+        
 
 # Classe Jogador que representa a nave
 class Player(pygame.sprite.Sprite):
@@ -116,8 +117,8 @@ pygame.mixer.init()
 
 
 Mapa=[[0,1,1,1,3],
-      [0,1,2,2,1],
       [0,0,0,0,1],
+      [2,1,2,0,1],
       [3,2,1,0,1],
       [3,3,2,0,0]]
 
