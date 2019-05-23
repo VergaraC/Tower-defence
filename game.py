@@ -80,11 +80,15 @@ class Mob(pygame.sprite.Sprite):
                     self.linha=self.prox_linha
                     self.prox_linha+=1
                     self.dy=0
+                    
+
+            
+            
                
                
 
 # Classe Jogador que representa a nave
-class Player(pygame.sprite.Sprite):
+class Torre(pygame.sprite.Sprite):
     
     
     # Construtor da classe.
@@ -94,32 +98,27 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        player_img = pygame.image.load(path.join( "chao.png")).convert()
-        self.image = player_img
-        
-        # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player_img, (1, 1))
+        torre_img = pygame.image.load(path.join( "torre.png")).convert()
+        self.image = torre_img
+        self.rect = self.image.get_rect()
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
-        
         # Detalhes sobre o posicionamento.
-        self.rect = self.image.get_rect()
-        
-        # Centraliza embaixo da tela.
-        self.rect.centerx = WIDTH / 2
-        self.rect.bottom = HEIGHT - 10
+        self.rect.x = 100
+        self.rect.y=100
+
 
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,1,1,1,3],
-      [0,1,2,2,1],
-      [0,0,0,0,1],
+Mapa=[[0,0,0,1,2],
+      [1,1,0,2,1],
+      [2,2,0,0,1],
       [3,2,1,0,1],
-      [3,3,2,0,0]]
+      [3,2,2,0,0]]
 
 
 # Tamanho da tela.
@@ -152,11 +151,11 @@ background_rect = background.get_rect()
 
 
 # Cria uma nave. O construtor será chamado automaticamente.
-player = Player()
+torre = Torre()
 mob=Mob()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+all_sprites.add(torre)
 all_sprites.add(mob)
 
 tiles=pygame.sprite.Group()
