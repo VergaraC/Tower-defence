@@ -14,7 +14,7 @@ img_dir = path.join(path.dirname(__file__), 'img')
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 30 # Frames por segundo
+FPS = 15 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -59,68 +59,70 @@ class Mob(pygame.sprite.Sprite):
             self.coluna=0
             self.prox_linha=1
             self.prox_col=1
-            
+            self.dx=0
+            self.dy=0
             
         def update(self):
-            dx=0
-            dy=0
-            if Mapa[self.linha][self.coluna+1]==0:
+            
+            if Mapa[self.linha][self.prox_col]==0:
                 self.rect.x+=self.speedx
                 self.rect.y+=0
-                dx+=self.speedx
-                if dx>=64:
-                    self.coluna+=1
-                    dx=0
-                
-            elif Mapa[self.linha + 1][self.coluna]==0:
+                self.dx+=self.speedx
+                if self.dx>=64:
+                    self.coluna=self.prox_col
+                    self.prox_col+=1
+                    self.dx=0
+            elif Mapa[self.prox_linha ][self.coluna]==0:
                 self.rect.x+=0
                 self.rect.y+=self.speedy
-                dy+=self.speedy
-                if dy>=64:
-                    self.linha+=1
-                    dy=0
+                self.dy+=self.speedy
+                if self.dy>=64:
+                    self.linha=self.prox_linha
+                    self.prox_linha+=1
+                    self.dy=0
+                    
 
-
+            
+            
                
-        
+               
 
 # Classe Jogador que representa a nave
-class Player(pygame.sprite.Sprite):
+class Torre(pygame.sprite.Sprite):
     
     
     # Construtor da classe.
-    def __init__(self):
-        
+    def __init__(self,x1,y1):
+
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        player_img = pygame.image.load(path.join( "chao.png")).convert()
-        self.image = player_img
-        
-        # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player_img, (1, 1))
+        torre_img = pygame.image.load(path.join( "torre.png")).convert()
+        self.image = torre_img
+        self.rect = self.image.get_rect()
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
-        
         # Detalhes sobre o posicionamento.
-        self.rect = self.image.get_rect()
+        print(Mapa[y1//64])
+        print(x1)
+        print(y1)
+        self.rect.centerx=(x1//64)*64 + 32
+        self.rect.centery=(y1//64)*64 + 32
         
-        # Centraliza embaixo da tela.
-        self.rect.centerx = WIDTH / 2
-        self.rect.bottom = HEIGHT - 10
+
 
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,1,1,1,3],
-      [0,0,0,0,1],
-      [2,1,2,0,1],
+Mapa=[[0,0,0,1,2],
+      [1,1,0,2,1],
+      [2,2,0,0,1],
       [3,2,1,0,1],
-      [3,3,2,0,0]]
+      [3,2,2,0,1]]
 
 
 # Tamanho da tela.
@@ -153,11 +155,11 @@ background_rect = background.get_rect()
 
 
 # Cria uma nave. O construtor será chamado automaticamente.
-player = Player()
+#torre = Torre()
 mob=Mob()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+#all_sprites.add(torre)
 all_sprites.add(mob)
 
 tiles=pygame.sprite.Group()
@@ -183,6 +185,17 @@ try:
             # Verifica se foi fechado
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                    # Dependendo da tecla, altera a velocidade.
+                if event.key == pygame.K_1:
+                    x=pygame.mouse.get_pos()[0]
+                    y=pygame.mouse.get_pos()[1]
+                    torre2=Torre(x,y)
+                    all_sprites.add(torre2)
+                    
+                    
+                    
+                    
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
