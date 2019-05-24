@@ -14,7 +14,7 @@ img_dir = path.join(path.dirname(__file__), 'img')
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 15 # Frames por segundo
+FPS = 5 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -118,11 +118,11 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,0,1,2],
-      [1,1,0,2,1],
-      [2,2,0,0,1],
-      [3,2,1,0,1],
-      [3,2,2,0,1]]
+Mapa=[[0,0,2,1,2],
+      [1,0,3,2,1],
+      [2,0,0,0,0],
+      [3,2,1,1,0],
+      [3,2,2,1,0]]
 
 
 # Tamanho da tela.

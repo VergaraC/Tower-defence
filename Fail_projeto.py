@@ -81,12 +81,7 @@ class Mob(pygame.sprite.Sprite):
                     self.prox_linha+=1
                     self.dy=0
                     
-
-            
-            
-               
-               
-
+                    
 # Classe Jogador que representa a nave
 class Torre(pygame.sprite.Sprite):
     
@@ -110,6 +105,16 @@ class Torre(pygame.sprite.Sprite):
         print(y1)
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
+        
+class Bullet(pygame.sprite.Sprite):
+    
+    def __init__(self,x ,y):
+        bullet_img = pygame.image.load(path.join( "bala.png"))
+        self.image = bullet_img
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x=100
+        self.rect.y=100
         
 
 
@@ -160,7 +165,11 @@ mob=Mob()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 #all_sprites.add(torre)
-all_sprites.add(mob)
+
+for i in range(8):
+    mob = Mob(assets["mob_img"])
+    all_sprites.add(mob)
+    mobs.add(mob)
 
 tiles=pygame.sprite.Group()
 for linha in range(len(Mapa)):
