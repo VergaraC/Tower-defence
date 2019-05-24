@@ -128,7 +128,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [64,64])
+        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [16,16])
         self.image = bullet_img
         
         # Deixando transparente.
