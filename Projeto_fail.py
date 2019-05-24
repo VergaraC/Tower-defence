@@ -113,6 +113,26 @@ class Torre(pygame.sprite.Sprite):
         
 
 
+class Bullet(pygame.sprite.Sprite):
+    
+    # Construtor da classe.
+    def __init__(self):
+        
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [16,16])
+        self.image = bullet_img
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        self.rect = self.image.get_rect()
+        # Detalhes sobre o posicionamento.
+        self.rect.centerx=100
+        self.rect.centery=100
+    
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
@@ -157,10 +177,12 @@ background_rect = background.get_rect()
 # Cria uma nave. O construtor será chamado automaticamente.
 #torre = Torre()
 mob=Mob()
+bullet=Bullet()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 #all_sprites.add(torre)
 all_sprites.add(mob)
+all_sprites.add(bullet)
 
 tiles=pygame.sprite.Group()
 for linha in range(len(Mapa)):
@@ -209,3 +231,4 @@ try:
         
 finally:
     pygame.quit()
+11
