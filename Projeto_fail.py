@@ -5,6 +5,7 @@
 # Importando as bibliotecas necessárias.
 import pygame
 from os import path
+import math
 import random
 import time
 # Estabelece a pasta que contem as figuras.
@@ -47,7 +48,7 @@ class Mob(pygame.sprite.Sprite):
             self.image = pygame.image.load("Mob.png").convert()
             
             self.rect = self.image.get_rect()
-            
+            #self.image.set_colorkey(BLACK)
             # Sorteia um lugar inicial em x
             self.rect.x = 16
             # Sorteia um lugar inicial em y
@@ -126,13 +127,21 @@ class Bullet(pygame.sprite.Sprite):
         self.image = bullet_img
         
         # Deixando transparente.
-        self.image.set_colorkey(BLACK)
-        
         self.rect = self.image.get_rect()
+        
+        self.image.set_colorkey(BLACK)
         # Detalhes sobre o posicionamento.
         self.rect.centerx=100
         self.rect.centery=100
-    
+        
+        xt=x1
+        yt=y1
+        
+        z=xt-xm
+        w=yt-ym
+        u=((z**(2) + (w**(2)))**(1/2)
+        vx=z/u
+        vy=w/u
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
@@ -219,6 +228,10 @@ try:
                     
                     
         all_sprites.update()
+        
+        hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+            for hit in hits:
+                
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
