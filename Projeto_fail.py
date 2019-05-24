@@ -93,8 +93,9 @@ class Torre(pygame.sprite.Sprite):
     
     
     # Construtor da classe.
-    def __init__(self,x1,y1):
-
+    def __init__(self,x1,y1,all_sprites,bullets):
+        self.all_sprites= all_sprites
+        self.bullets=bullets
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
@@ -111,19 +112,23 @@ class Torre(pygame.sprite.Sprite):
         print(y1)
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
+    def update(self):
+        bullet=Bullet(self.rect.centerx,self.rect.centery)
+        self.all_sprites.add(bullet)
+        self.bullets.add(bullet)
         
-
+        
 
 class Bullet(pygame.sprite.Sprite):
     
     # Construtor da classe.
-    def __init__(self):
+    def __init__(self,x,y):
         
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [16,16])
+        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [64,64])
         self.image = bullet_img
         
         # Deixando transparente.
@@ -131,17 +136,20 @@ class Bullet(pygame.sprite.Sprite):
         
         self.image.set_colorkey(BLACK)
         # Detalhes sobre o posicionamento.
-        self.rect.centerx=100
-        self.rect.centery=100
+        self.rect.centerx=x
+        self.rect.centery=y
+    
         
-        xt=x1
-        yt=y1
+''' xt=x1
+    yt=y1
         
-        z=xt-xm
-        w=yt-ym
-        u=((z**(2) + (w**(2)))**(1/2)
-        vx=z/u
-        vy=w/u
+    z=xt-xm
+    w=yt-ym
+    u=((z**(2) + (w**(2)))**(1/2)
+    vx=z/u
+    vy=w/u'''
+    
+    
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
@@ -159,7 +167,7 @@ imgX=64
 imgY=64
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-agua = pygame.transform.scale(pygame.image.load("agua.png"), [imgX,imgY])
+agua = pygame.transform.scale(pygame.image.load("agua.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
@@ -186,12 +194,11 @@ background_rect = background.get_rect()
 # Cria uma nave. O construtor será chamado automaticamente.
 #torre = Torre()
 mob=Mob()
-bullet=Bullet()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
+bullets= pygame.sprite.Group()
 #all_sprites.add(torre)
 all_sprites.add(mob)
-all_sprites.add(bullet)
 
 tiles=pygame.sprite.Group()
 for linha in range(len(Mapa)):
@@ -210,6 +217,8 @@ try:
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
+        
+        
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
             
@@ -221,7 +230,7 @@ try:
                 if event.key == pygame.K_1:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
-                    torre2=Torre(x,y)
+                    torre2=Torre(x,y,all_sprites,bullets)
                     all_sprites.add(torre2)
                     
                     
@@ -229,8 +238,8 @@ try:
                     
         all_sprites.update()
         
-        hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
-            for hit in hits:
+        ''' hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+            for hit in hits:'''
                 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
@@ -244,4 +253,3 @@ try:
         
 finally:
     pygame.quit()
-11
