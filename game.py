@@ -50,7 +50,7 @@ class Mob(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             #self.image.set_colorkey(BLACK)
             # Sorteia um lugar inicial em x
-11            self.rect.x = 16
+            self.rect.x = 16
             # Sorteia um lugar inicial em y
             self.rect.y = 16
             # Sorteia uma velocidade inicial
