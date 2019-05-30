@@ -128,7 +128,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [64,64])
+        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [16,16])
         self.image = bullet_img
         
         # Deixando transparente.
@@ -138,6 +138,13 @@ class Bullet(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect.centerx=x
         self.rect.centery=y
+        self.speedy=3
+        
+        def update(self):
+            
+            self.rect.y+=self.speedy
+            
+        
     
         
 ''' xt=x1
@@ -159,7 +166,7 @@ Mapa=[[0,0,0,1,2],
       [1,1,0,2,1],
       [2,2,0,0,1],
       [3,2,1,0,1],
-      [3,2,2,0,1]]
+      [3,2,2,0,0]]
 
 
 # Tamanho da tela.
