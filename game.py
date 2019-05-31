@@ -115,7 +115,7 @@ class Torre(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
 
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
-        self.frame_ticks = 500
+        self.frame_ticks = 1000
         
     def update(self):
         now = pygame.time.get_ticks()
