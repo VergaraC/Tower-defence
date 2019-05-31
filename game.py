@@ -15,7 +15,7 @@ img_dir = path.join(path.dirname(__file__), 'img')
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 15 # Frames por segundo
+FPS = 5 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -54,8 +54,8 @@ class Mob(pygame.sprite.Sprite):
             # Sorteia um lugar inicial em y
             self.rect.y = 16
             # Sorteia uma velocidade inicial
-            self.speedx = 4
-            self.speedy = 4
+            self.speedx = 2
+            self.speedy = 2
             self.linha=0
             self.coluna=0
             self.prox_linha=1
@@ -113,7 +113,11 @@ class Torre(pygame.sprite.Sprite):
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
         self.last_update = pygame.time.get_ticks()
-
+        
+        self.alvo=None
+        self.d=None
+        
+        self.V=5
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         self.frame_ticks = 1000
         
@@ -122,17 +126,19 @@ class Torre(pygame.sprite.Sprite):
 
         # Verifica quantos ticks se passaram desde a ultima mudança de frame.
         elapsed_ticks = now - self.last_update
-
+        
         # Se já está na hora de mudar de imagem...
-        if elapsed_ticks > self.frame_ticks:
-
+        if elapsed_ticks > self.frame_ticks and self.alvo != None:
+            print(self.alvo)
             # Marca o tick da nova imagem.
             self.last_update = now
             bullet=Bullet(self.rect.centerx,self.rect.centery)
+         
+            bullet.speedx= - self.V*self.dx/self.d
+            bullet.speedy= - self.V*self.dy/self.d
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
-        
-        
+            print( bullet.speedy, bullet.speedx)
 
 class Bullet(pygame.sprite.Sprite):
     
@@ -153,22 +159,13 @@ class Bullet(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect.centerx=x
         self.rect.centery=y
-        self.speedy=-5
+        self.speedyx=0
+        self.speedy=0
         
     def update(self):
         self.rect.y+=self.speedy
-            
+        self.rect.x+=self.speedx
         
-    
-        
-''' xt=x1
-    yt=y1
-        
-    z=xt-xm
-    w=yt-ym
-    u=((z**(2) + (w**(2)))**(1/2)
-    vx=z/u
-    vy=w/u'''
     
     
 # Inicialização do Pygame.
@@ -182,6 +179,9 @@ Mapa=[[0,0,0,1,2],
       [3,2,1,0,1],
       [3,2,2,0,0]]
 
+
+YY=len(Mapa)
+XX=len(Mapa[0])
 
 # Tamanho da tela.
 imgX=64
@@ -197,7 +197,7 @@ Terrenos={
         0:percurso,
         1:chao,
         2:agua ,
-        3:flor,
+        3:flor
         }
 
 
@@ -218,6 +218,7 @@ mob=Mob()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
+torre2=[]
 #all_sprites.add(torre)
 all_sprites.add(mob)
 
@@ -226,7 +227,6 @@ for linha in range(len(Mapa)):
     for coluna in range(len(Mapa[linha])):
         terreno=Terreno(Mapa[linha][coluna],linha,coluna)
         tiles.add(terreno)
-
 
 # Comando para evitar travamentos.
 try:
@@ -237,8 +237,6 @@ try:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
-        
-        
         
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
@@ -251,21 +249,23 @@ try:
                 if event.key == pygame.K_1:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
-                    torre2=Torre(x,y,all_sprites,bullets)
-                    all_sprites.add(torre2)
-                    
-                    
-               # if event.key == pygame.K_q:
-                  #  bullet=Bullet(pygame.image.load("Bala.png") , mob.rect.x+50 , mob.rect.y+5)
-                 #   all_sprites.add(bullet)
-                 #   bullets.add(bullet)
-                    
-                    
-                    
+                    torre1=Torre(x,y,all_sprites,bullets)
+                    torre2.append(torre1)
+                    all_sprites.add(torre1)
+            if pygame.mouse.get_pressed()[0]:
+                x_tiro=pygame.mouse.get_pos()[0]
+                y_tiro=pygame.mouse.get_pos()[1]
+            
+                for torre in torre2:
+                    torre.alvo=[x_tiro,y_tiro]
+                    torre.d=math.sqrt(torre.alvo[0]*2 + torre.alvo[1]*2)
+                    torre.dx= torre.rect.centerx - torre.alvo[0]
+                    torre.dy= torre.rect.centery - torre.alvo[1]
+                                        
         all_sprites.update()
-        
-        ''' hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
-            for hit in hits:'''
+        """if state==playingPLAYING:
+            hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+            for hit in hits:"""
                 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
