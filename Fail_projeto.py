@@ -62,8 +62,11 @@ class Mob(pygame.sprite.Sprite):
             self.prox_col=1
             self.dx=0
             self.dy=0
+            self.linha_anterior=0
+            self.coluna_anterior=0
             
         def update(self):
+            
             
             #if Mapa[self.linha][self.prox_col]==0:
              #   self.rect.x+=self.speedx
@@ -82,27 +85,38 @@ class Mob(pygame.sprite.Sprite):
                   #  self.prox_linha+=1
                    # self.dy=0
                    
-           if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0:
-                self.rect.x+=self.speedx
-                self.rect.y+=0
-                self.dx+=self.speedx
-                if self.dx>=64:
-                    self.coluna=self.prox_col
-                    self.prox_col+=1
-                    self.dx=0
-            
-           elif self.prox_linha<len(Mapa) and self.coluna<len(Mapa) and Mapa[self.prox_linha ][self.coluna]==0:
-                self.rect.x+=0
-                self.rect.y+=self.speedy
-                self.dy+=self.speedy
-                if self.dy>=64:
-                    self.linha=self.prox_linha
-                    self.prox_linha+=1
-                    self.dy=0               
-                
-                    
+           if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0 and self.prox_col!=self.coluna_anterior:
+               self.rect.x+=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.coluna=self.prox_col
+                   self.prox_col+=1
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.dx=0
+           elif self.prox_linha<len(Mapa) and self.coluna<len(Mapa) and Mapa[self.prox_linha ][self.coluna]==0 and self.prox_linha!=self.linha_anterior:
+               self.rect.x+=0
+               self.rect.y+=self.speedy
+               self.dy+=self.speedy
+               if self.dy>=64:
+                   self.linha=self.prox_linha
+                   self.prox_linha+=1
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.dy=0
+           elif self.linha<len(Mapa) and (self.coluna-1)<len(Mapa[self.linha]) and Mapa[self.linha][self.coluna-1]==0 and (self.coluna-1)!=self.coluna_anterior:
+               self.rect.x-=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.coluna=self.coluna-1
+                   self.prox_col-=1
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.dx=0
+
            
-               
                
 
 # Classe Jogador que representa a nave
@@ -194,10 +208,10 @@ pygame.mixer.init()
 
 
 Mapa=[[0,0,0,1,2],
-      [1,1,0,2,1],
-      [2,2,0,0,1],
-      [3,2,1,0,4],
-      [3,2,2,0,4]]
+      [1,2,0,1,1],
+      [0,0,0,3,2],
+      [0,2,1,2,4],
+      [0,0,0,0,4]]
 
 
 # Tamanho da tela.
