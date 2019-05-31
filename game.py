@@ -157,8 +157,8 @@ class Bullet(pygame.sprite.Sprite):
         
         self.image.set_colorkey(BLACK)
         # Detalhes sobre o posicionamento.
-        self.rect.centerx=x
-        self.rect.centery=y
+        self.rect.centerx=x 
+        self.rect.centery=y 
         self.speedyx=0
         self.speedy=0
         
