@@ -13,7 +13,7 @@ import time
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 5 # Frames por segundo
+FPS = 15 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -213,8 +213,9 @@ background_rect = background.get_rect()
 
 # Cria uma nave. O construtor será chamado automaticamente.
 #torre = Torre()
-Mob
-mob=pygame.sprite.Group()
+mob=Mob()
+mobg=pygame.sprite.Group()
+mobg.add(mob)
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
@@ -233,6 +234,7 @@ try:
     
     # Loop principal.
     running = True
+    last_update2 = pygame.time.get_ticks()
     while running:
         
         # Ajusta a velocidade do jogo.
@@ -264,16 +266,17 @@ try:
                                         
         all_sprites.update()
         mob.image = pygame.image.load("Mob.png").convert()
-        hits = pygame.sprite.groupcollide(mob, bullets, True, True)
-        torre.last_update2 = pygame.time.get_ticks()
+        hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
         
-        if hits:
-            now2 = pygame.time.get_ticks()
+        
+
+        now2 = pygame.time.get_ticks()
             
-            if   now2 - torre.last_update2 > 2000:
-                   mob2=Mob()
-                   all_sprites.add(mob2)
-                   mob.add(mob2)
+        if   now2 - last_update2 > 1000:
+            mob2=Mob()
+            all_sprites.add(mob2)
+            mobg.add(mob2)
+            last_update2=now2
                 
                 
         # A cada loop, redesenha o fundo e os sprites
