@@ -1,5 +1,6 @@
 
 
+
 # -*- coding: utf-8 -*-
 
 # Importando as bibliotecas necessárias.
@@ -15,7 +16,7 @@ img_dir = path.join(path.dirname(__file__), 'img')
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 15 # Frames por segundo
+FPS = 5 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -54,8 +55,8 @@ class Mob(pygame.sprite.Sprite):
             # Sorteia um lugar inicial em y
             self.rect.y = 16
             # Sorteia uma velocidade inicial
-            self.speedx = 4
-            self.speedy = 4
+            self.speedx = 2
+            self.speedy = 2
             self.linha=0
             self.coluna=0
             self.prox_linha=1
@@ -112,11 +113,29 @@ class Torre(pygame.sprite.Sprite):
         print(y1)
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
-    def update(self):
-        bullet=Bullet(self.rect.centerx,self.rect.centery)
-        self.all_sprites.add(bullet)
-        self.bullets.add(bullet)
+        self.last_update = pygame.time.get_ticks()
         
+        self.alvo=None
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        self.frame_ticks = 1000
+        
+    def update(self):
+        now = pygame.time.get_ticks()
+
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+        
+        
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks and self.alvo != None:
+
+            # Marca o tick da nova imagem.
+            self.last_update = now
+            bullet=Bullet(self.rect.centerx,self.rect.centery)
+            bullet.speedx=(-torre2.rect.centerx  +self.alvo[0])/5
+            bullet.speedy=(-torre2.rect.centery  +self.alvo[1])/5
+            self.all_sprites.add(bullet)
+            self.bullets.add(bullet)
         
 
 class Bullet(pygame.sprite.Sprite):
@@ -138,23 +157,13 @@ class Bullet(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect.centerx=x
         self.rect.centery=y
-        self.speedy=3
+        self.speedyx=0
+        self.speedy=0
         
-        def update(self):
-            
-            self.rect.y+=self.speedy
-            
+    def update(self):
+        self.rect.y+=self.speedy
+        self.rect.x+=self.speedx
         
-    
-        
-''' xt=x1
-    yt=y1
-        
-    z=xt-xm
-    w=yt-ym
-    u=((z**(2) + (w**(2)))**(1/2)
-    vx=z/u
-    vy=w/u'''
     
     
 # Inicialização do Pygame.
@@ -224,8 +233,6 @@ try:
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
-        
-        
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
             
@@ -239,7 +246,10 @@ try:
                     y=pygame.mouse.get_pos()[1]
                     torre2=Torre(x,y,all_sprites,bullets)
                     all_sprites.add(torre2)
-                    
+            if pygame.mouse.get_pressed()[0]:
+                x_tiro=pygame.mouse.get_pos()[0]
+                y_tiro=pygame.mouse.get_pos()[1]
+                torre2.alvo=[x_tiro,y_tiro]
                     
                     
                     
