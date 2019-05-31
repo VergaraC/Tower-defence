@@ -65,6 +65,8 @@ class Mob(pygame.sprite.Sprite):
             
         def update(self):
             
+                
+                
             if Mapa[self.linha][self.prox_col]==0:
                 self.rect.x+=self.speedx
                 self.rect.y+=0
@@ -81,9 +83,8 @@ class Mob(pygame.sprite.Sprite):
                     self.linha=self.prox_linha
                     self.prox_linha+=1
                     self.dy=0
-                    
-
             
+                    
             
                
                
@@ -153,7 +154,7 @@ class Bullet(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect.centerx=x
         self.rect.centery=y
-        self.speedy=-5
+        self.speedy=-3
         
     def update(self):
         self.rect.y+=self.speedy
@@ -179,8 +180,8 @@ pygame.mixer.init()
 Mapa=[[0,0,0,1,2],
       [1,1,0,2,1],
       [2,2,0,0,1],
-      [3,2,1,0,1],
-      [3,2,2,0,0]]
+      [3,2,1,0,4],
+      [3,2,2,0,4]]
 
 
 # Tamanho da tela.
@@ -192,12 +193,14 @@ agua = pygame.transform.scale(pygame.image.load("agua.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
+casa= pygame.transform.scale(pygame.image.load("casa.png"), [imgX,imgY])
 
 Terrenos={
         0:percurso,
         1:chao,
         2:agua ,
-        3:flor
+        3:flor,
+        4:casa
         }
 
 
