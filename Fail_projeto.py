@@ -65,9 +65,24 @@ class Mob(pygame.sprite.Sprite):
             
         def update(self):
             
-                
-                
-            if Mapa[self.linha][self.prox_col]==0:
+            #if Mapa[self.linha][self.prox_col]==0:
+             #   self.rect.x+=self.speedx
+              #  self.rect.y+=0
+               # self.dx+=self.speedx
+                #if self.dx>=64:
+                 #   self.coluna=self.prox_col
+                  #  self.prox_col+=1
+                   # self.dx=0
+            #elif Mapa[self.prox_linha ][self.coluna]==0:
+             #   self.rect.x+=0
+              #  self.rect.y+=self.speedy
+               # self.dy+=self.speedy
+                #if self.dy>=64:
+                 #   self.linha=self.prox_linha
+                  #  self.prox_linha+=1
+                   # self.dy=0
+                   
+           if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0:
                 self.rect.x+=self.speedx
                 self.rect.y+=0
                 self.dx+=self.speedx
@@ -75,17 +90,18 @@ class Mob(pygame.sprite.Sprite):
                     self.coluna=self.prox_col
                     self.prox_col+=1
                     self.dx=0
-            elif Mapa[self.prox_linha ][self.coluna]==0:
+            
+           elif self.prox_linha<len(Mapa) and self.coluna<len(Mapa) and Mapa[self.prox_linha ][self.coluna]==0:
                 self.rect.x+=0
                 self.rect.y+=self.speedy
                 self.dy+=self.speedy
                 if self.dy>=64:
                     self.linha=self.prox_linha
                     self.prox_linha+=1
-                    self.dy=0
-            
+                    self.dy=0               
+                
                     
-            
+           
                
                
 
