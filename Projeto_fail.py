@@ -7,10 +7,7 @@
 import pygame
 from os import path
 import math
-import random
 import time
-# Estabelece a pasta que contem as figuras.
-img_dir = path.join(path.dirname(__file__), 'img')
 
 
 # Dados gerais do jogo.
@@ -46,15 +43,16 @@ class Mob(pygame.sprite.Sprite):
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
             # Detalhes sobre o posicionamento.
+            Mob.image = pygame.image.load("Mob.png").convert()
             self.image = pygame.image.load("Mob.png").convert()
             
             self.rect = self.image.get_rect()
             #self.image.set_colorkey(BLACK)
-            # Sorteia um lugar inicial em x
+           
             self.rect.x = 16
-            # Sorteia um lugar inicial em y
+     
             self.rect.y = 16
-            # Sorteia uma velocidade inicial
+  
             self.speedx = 2
             self.speedy = 2
             self.linha=0
@@ -113,13 +111,13 @@ class Torre(pygame.sprite.Sprite):
         print(y1)
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
-        self.last_update = pygame.time.get_ticks()
         
         self.alvo=None
         self.d=None
         
         self.V=5
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 1000
         
     def update(self):
@@ -215,7 +213,8 @@ background_rect = background.get_rect()
 
 # Cria uma nave. O construtor será chamado automaticamente.
 #torre = Torre()
-mob=Mob()
+Mob
+mob=pygame.sprite.Group()
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
@@ -264,9 +263,18 @@ try:
                     torre.dy= torre.rect.centery - torre.alvo[1]
                                         
         all_sprites.update()
-        """if state==playingPLAYING:
-            hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
-            for hit in hits:"""
+        mob.image = pygame.image.load("Mob.png").convert()
+        hits = pygame.sprite.groupcollide(mob, bullets, True, True)
+        torre.last_update2 = pygame.time.get_ticks()
+        
+        if hits:
+            now2 = pygame.time.get_ticks()
+            
+            if   now2 - torre.last_update2 > 2000:
+                   mob2=Mob()
+                   all_sprites.add(mob2)
+                   mob.add(mob2)
+                
                 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
