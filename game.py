@@ -1,5 +1,7 @@
 
 
+
+
 # -*- coding: utf-8 -*-
 
 # Importando as bibliotecas necessárias.
@@ -10,8 +12,8 @@ import time
 
 
 # Dados gerais do jogo.
-WIDTH = 320 # Largura da tela
-HEIGHT = 320 # Altura da tela
+WIDTH = 640 # Largura da tela
+HEIGHT = 640 # Altura da tela
 FPS = 15 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
@@ -141,7 +143,7 @@ class Torre(pygame.sprite.Sprite):
         self.V=5
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         self.last_update = pygame.time.get_ticks()
-        self.frame_ticks = 1000
+        self.frame_ticks = 750
         
     def update(self):
         now = pygame.time.get_ticks()
@@ -195,11 +197,16 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,1,0,0],
-      [1,0,2,0,1],
-      [0,0,3,0,2],
-      [0,2,0,0,3],
-      [0,0,0,2,4]]
+Mapa=[[0,0,1,0,0,0,0,3,2,4],
+      [1,0,2,0,1,2,0,2,3,4],
+      [0,0,3,0,0,3,0,4,4,4],
+      [0,2,3,2,0,1,0,1,1,4],
+      [0,0,2,0,0,2,0,2,0,0],
+      [1,0,3,0,2,3,0,4,0,4],
+      [1,0,2,0,3,0,0,1,0,4],
+      [2,0,0,0,2,0,4,0,0,4],
+      [1,2,2,2,3,0,1,0,1,4],
+      [2,1,2,2,4,0,0,0,2,4]]
 
 
 YY=len(Mapa)
@@ -292,12 +299,15 @@ try:
         all_sprites.update()
         mob.image = pygame.image.load("Mob.png").convert()
         hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
-        
+        for hit in hits:
+            mob2=Mob()
+            all_sprites.add(mob2)
+            mobg.add(mob2)
         
 
         now2 = pygame.time.get_ticks()
             
-        if   now2 - last_update2 > 1000:
+        if   now2 - last_update2 > 500:
             mob2=Mob()
             all_sprites.add(mob2)
             mobg.add(mob2)
@@ -316,4 +326,3 @@ try:
         
 finally:
     pygame.quit()
-
