@@ -1,6 +1,5 @@
 
 
-
 # -*- coding: utf-8 -*-
 
 # Importando as bibliotecas necessárias.
@@ -43,48 +42,72 @@ class Mob(pygame.sprite.Sprite):
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
             # Detalhes sobre o posicionamento.
-            Mob.image = pygame.image.load("Mob.png").convert()
             self.image = pygame.image.load("Mob.png").convert()
             
             self.rect = self.image.get_rect()
             #self.image.set_colorkey(BLACK)
-           
+            # Sorteia um lugar inicial em x
             self.rect.x = 16
-     
+            # Sorteia um lugar inicial em y
             self.rect.y = 16
-  
-            self.speedx = 2
-            self.speedy = 2
+            # Sorteia uma velocidade inicial
+            self.speedx = 4
+            self.speedy = 4
             self.linha=0
             self.coluna=0
             self.prox_linha=1
             self.prox_col=1
             self.dx=0
             self.dy=0
+            self.linha_anterior=0
+            self.coluna_anterior=0
             
         def update(self):
             
-            if Mapa[self.linha][self.prox_col]==0:
-                self.rect.x+=self.speedx
-                self.rect.y+=0
-                self.dx+=self.speedx
-                if self.dx>=64:
-                    self.coluna=self.prox_col
-                    self.prox_col+=1
-                    self.dx=0
-            elif Mapa[self.prox_linha ][self.coluna]==0:
-                self.rect.x+=0
-                self.rect.y+=self.speedy
-                self.dy+=self.speedy
-                if self.dy>=64:
-                    self.linha=self.prox_linha
-                    self.prox_linha+=1
-                    self.dy=0
-                    
+            
+                   
+           if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0 and self.prox_col!=self.coluna_anterior:
+               self.rect.x+=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.coluna=self.prox_col
+                   self.prox_col+=1
+                   self.dx=0
+           elif self.prox_linha<len(Mapa) and self.coluna<len(Mapa) and Mapa[self.prox_linha ][self.coluna]==0 and self.prox_linha!=self.linha_anterior:
+               self.rect.x+=0
+               self.rect.y+=self.speedy
+               self.dy+=self.speedy
+               if self.dy>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.linha=self.prox_linha
+                   self.prox_linha+=1
 
-            
-            
-               
+                   self.dy=0
+           elif self.linha<len(Mapa) and (self.coluna-1)<len(Mapa[self.linha]) and Mapa[self.linha][self.coluna-1]==0 and (self.coluna-1)!=self.coluna_anterior:
+               self.rect.x-=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.coluna=self.coluna-1
+                   self.prox_col-=1
+                   self.dx=0
+                   
+           elif (self.linha-1)<len(Mapa) and (self.coluna)<len(Mapa[self.linha-1]) and Mapa[self.linha-1][self.coluna]==0 and (self.linha-1)!=self.linha_anterior:
+               self.rect.x+=0
+               self.rect.y-=self.speedy
+               self.dy+=self.speedy
+               if self.dy>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.linha=self.linha-1
+                   self.prox_linha-=1
+                   self.dy=0
                
 
 # Classe Jogador que representa a nave
@@ -172,11 +195,11 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,0,1,2],
-      [1,1,0,2,1],
-      [2,2,0,0,1],
-      [3,2,1,0,1],
-      [3,2,2,0,0]]
+Mapa=[[0,0,1,0,0],
+      [1,0,2,0,1],
+      [0,0,3,0,2],
+      [0,2,0,0,3],
+      [0,0,0,2,4]]
 
 
 YY=len(Mapa)
@@ -191,12 +214,14 @@ agua = pygame.transform.scale(pygame.image.load("agua.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
+casa= pygame.transform.scale(pygame.image.load("casa.png"), [imgX,imgY])
 
 Terrenos={
         0:percurso,
         1:chao,
         2:agua ,
-        3:flor
+        3:flor,
+        4:casa
         }
 
 
@@ -267,6 +292,10 @@ try:
         all_sprites.update()
         mob.image = pygame.image.load("Mob.png").convert()
         hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
+        for hit in hits:
+            mob2=Mob()
+            all_sprites.add(mob2)
+            mobg.add(mob2)
         
         
 
@@ -291,3 +320,4 @@ try:
         
 finally:
     pygame.quit()
+
