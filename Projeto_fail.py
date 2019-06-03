@@ -131,9 +131,7 @@ class Torre(pygame.sprite.Sprite):
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         # Detalhes sobre o posicionamento.
-        print(Mapa[y1//64])
-        print(x1)
-        print(y1)
+
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
         
@@ -153,7 +151,7 @@ class Torre(pygame.sprite.Sprite):
         
         # Se já está na hora de mudar de imagem...
         if elapsed_ticks > self.frame_ticks and self.alvo != None:
-            print(self.alvo)
+            
             # Marca o tick da nova imagem.
             self.last_update = now
             bullet=Bullet(self.rect.centerx,self.rect.centery)
@@ -162,7 +160,7 @@ class Torre(pygame.sprite.Sprite):
             bullet.speedy= - self.V*self.dy/self.d
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
-            print( bullet.speedy, bullet.speedx)
+           
 
 class Bullet(pygame.sprite.Sprite):
     
@@ -267,6 +265,7 @@ try:
     # Loop principal.
     running = True
     last_update2 = pygame.time.get_ticks()
+    last_update_torre = pygame.time.get_ticks()
     while running:
         
         # Ajusta a velocidade do jogo.
@@ -280,12 +279,14 @@ try:
                 running = False
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
-                if event.key == pygame.K_1:
+                now_torre = pygame.time.get_ticks()
+                if event.key == pygame.K_1  and now_torre - last_update_torre>5000:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
                     torre2.append(torre1)
                     all_sprites.add(torre1)
+                    last_update_torre= now_torre
             if pygame.mouse.get_pressed()[0]:
                 x_tiro=pygame.mouse.get_pos()[0]
                 y_tiro=pygame.mouse.get_pos()[1]
