@@ -280,13 +280,14 @@ try:
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
                 now_torre = pygame.time.get_ticks()
-                if event.key == pygame.K_1  and now_torre - last_update_torre>5000:
+                if event.key == pygame.K_1  and now_torre - last_update_torre >=3000 or torre2==[]:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
                     torre2.append(torre1)
                     all_sprites.add(torre1)
                     last_update_torre= now_torre
+            
             if pygame.mouse.get_pressed()[0]:
                 x_tiro=pygame.mouse.get_pos()[0]
                 y_tiro=pygame.mouse.get_pos()[1]
@@ -296,7 +297,7 @@ try:
                     torre.d=math.sqrt(torre.alvo[0]*2 + torre.alvo[1]*2)
                     torre.dx= torre.rect.centerx - torre.alvo[0]
                     torre.dy= torre.rect.centery - torre.alvo[1]
-                                        
+        #Morte e Respawn
         all_sprites.update()
         mob.image = pygame.image.load("Mob.png").convert()
         hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
@@ -305,7 +306,7 @@ try:
             all_sprites.add(mob2)
             mobg.add(mob2)
         
-
+        #Spawn constante
         now2 = pygame.time.get_ticks()
             
         if   now2 - last_update2 > 500:
