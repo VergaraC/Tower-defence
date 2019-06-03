@@ -6,16 +6,13 @@
 import pygame
 from os import path
 import math
-import random
 import time
-# Estabelece a pasta que contem as figuras.
-img_dir = path.join(path.dirname(__file__), 'img')
 
 
 # Dados gerais do jogo.
 WIDTH = 320 # Largura da tela
 HEIGHT = 320 # Altura da tela
-FPS = 5 # Frames por segundo
+FPS = 15 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -54,38 +51,63 @@ class Mob(pygame.sprite.Sprite):
             # Sorteia um lugar inicial em y
             self.rect.y = 16
             # Sorteia uma velocidade inicial
-            self.speedx = 2
-            self.speedy = 2
+            self.speedx = 4
+            self.speedy = 4
             self.linha=0
             self.coluna=0
             self.prox_linha=1
             self.prox_col=1
             self.dx=0
             self.dy=0
+            self.linha_anterior=0
+            self.coluna_anterior=0
             
         def update(self):
             
-            if Mapa[self.linha][self.prox_col]==0:
-                self.rect.x+=self.speedx
-                self.rect.y+=0
-                self.dx+=self.speedx
-                if self.dx>=64:
-                    self.coluna=self.prox_col
-                    self.prox_col+=1
-                    self.dx=0
-            elif Mapa[self.prox_linha ][self.coluna]==0:
-                self.rect.x+=0
-                self.rect.y+=self.speedy
-                self.dy+=self.speedy
-                if self.dy>=64:
-                    self.linha=self.prox_linha
-                    self.prox_linha+=1
-                    self.dy=0
-                    
+            
+                   
+           if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0 and self.prox_col!=self.coluna_anterior:
+               self.rect.x+=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.coluna=self.prox_col
+                   self.prox_col+=1
+                   self.dx=0
+           elif self.prox_linha<len(Mapa) and self.coluna<len(Mapa) and Mapa[self.prox_linha ][self.coluna]==0 and self.prox_linha!=self.linha_anterior:
+               self.rect.x+=0
+               self.rect.y+=self.speedy
+               self.dy+=self.speedy
+               if self.dy>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.linha=self.prox_linha
+                   self.prox_linha+=1
 
-            
-            
-               
+                   self.dy=0
+           elif self.linha<len(Mapa) and (self.coluna-1)<len(Mapa[self.linha]) and Mapa[self.linha][self.coluna-1]==0 and (self.coluna-1)!=self.coluna_anterior:
+               self.rect.x-=self.speedx
+               self.rect.y+=0
+               self.dx+=self.speedx
+               if self.dx>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.coluna=self.coluna-1
+                   self.prox_col-=1
+                   self.dx=0
+                   
+           elif (self.linha-1)<len(Mapa) and (self.coluna)<len(Mapa[self.linha-1]) and Mapa[self.linha-1][self.coluna]==0 and (self.linha-1)!=self.linha_anterior:
+               self.rect.x+=0
+               self.rect.y-=self.speedy
+               self.dy+=self.speedy
+               if self.dy>=64:
+                   self.linha_anterior=self.linha
+                   self.coluna_anterior=self.coluna
+                   self.linha=self.linha-1
+                   self.prox_linha-=1
+                   self.dy=0
                
 
 # Classe Jogador que representa a nave
@@ -112,13 +134,13 @@ class Torre(pygame.sprite.Sprite):
         print(y1)
         self.rect.centerx=(x1//64)*64 + 32
         self.rect.centery=(y1//64)*64 + 32
-        self.last_update = pygame.time.get_ticks()
         
         self.alvo=None
         self.d=None
         
         self.V=5
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 1000
         
     def update(self):
@@ -157,8 +179,8 @@ class Bullet(pygame.sprite.Sprite):
         
         self.image.set_colorkey(BLACK)
         # Detalhes sobre o posicionamento.
-        self.rect.centerx=x 
-        self.rect.centery=y 
+        self.rect.centerx=x
+        self.rect.centery=y
         self.speedyx=0
         self.speedy=0
         
@@ -173,11 +195,11 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,0,1,2],
-      [1,1,0,2,1],
-      [2,2,0,0,1],
-      [3,2,1,0,1],
-      [3,2,2,0,0]]
+Mapa=[[0,0,1,0,0],
+      [1,0,2,0,1],
+      [0,0,3,0,2],
+      [0,2,0,0,3],
+      [0,0,0,2,4]]
 
 
 YY=len(Mapa)
@@ -192,12 +214,14 @@ agua = pygame.transform.scale(pygame.image.load("agua.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
+casa= pygame.transform.scale(pygame.image.load("casa.png"), [imgX,imgY])
 
 Terrenos={
         0:percurso,
         1:chao,
         2:agua ,
-        3:flor
+        3:flor,
+        4:casa
         }
 
 
@@ -215,6 +239,8 @@ background_rect = background.get_rect()
 # Cria uma nave. O construtor será chamado automaticamente.
 #torre = Torre()
 mob=Mob()
+mobg=pygame.sprite.Group()
+mobg.add(mob)
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
@@ -233,6 +259,7 @@ try:
     
     # Loop principal.
     running = True
+    last_update2 = pygame.time.get_ticks()
     while running:
         
         # Ajusta a velocidade do jogo.
@@ -263,9 +290,19 @@ try:
                     torre.dy= torre.rect.centery - torre.alvo[1]
                                         
         all_sprites.update()
-        """if state==playingPLAYING:
-            hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
-            for hit in hits:"""
+        mob.image = pygame.image.load("Mob.png").convert()
+        hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
+        
+        
+
+        now2 = pygame.time.get_ticks()
+            
+        if   now2 - last_update2 > 1000:
+            mob2=Mob()
+            all_sprites.add(mob2)
+            mobg.add(mob2)
+            last_update2=now2
+                
                 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
@@ -279,3 +316,4 @@ try:
         
 finally:
     pygame.quit()
+
