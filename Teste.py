@@ -298,7 +298,10 @@ try:
         all_sprites.update()
         mob.image = pygame.image.load("Mob.png").convert()
         hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
-        
+        for hit in hits:
+            mob2=Mob()
+            all_sprites.add(mob2)
+            mobg.add(mob2)
         
 
         now2 = pygame.time.get_ticks()
