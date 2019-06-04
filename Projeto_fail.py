@@ -16,6 +16,9 @@ WIDTH = 640 # Largura da tela
 HEIGHT = 640 # Altura da tela
 FPS = 15 # Frames por segundo
 
+#Vida do castelo
+VIDA=10
+
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -270,7 +273,10 @@ try:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
-        
+        while mob.rect.x>586 and mob.rect.y> 256:
+            VIDA-=1
+            if VIDA==0:
+                running=False
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
             
@@ -280,7 +286,7 @@ try:
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
                 now_torre = pygame.time.get_ticks()
-                if event.key == pygame.K_1  and now_torre - last_update_torre >=10 or torre2==[]:
+                if event.key == pygame.K_1  and now_torre - last_update_torre >=5000 or torre2==[]:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
