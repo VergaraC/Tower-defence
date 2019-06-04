@@ -15,7 +15,9 @@ import time
 # Dados gerais do jogo.
 WIDTH = 960 # Largura da tela
 HEIGHT = 640 # Altura da tela
-FPS = 15 # Frames por segundo
+FPS = 150 # Frames por segundo
+
+VIDA=10
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
@@ -271,11 +273,18 @@ try:
     running = True
     last_update2 = pygame.time.get_ticks()
     last_update_torre = pygame.time.get_ticks()
+    last_update_VIDA = pygame.time.get_ticks()
     while running:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
+        now_VIDA = pygame.time.get_ticks()
+        if mob.rect.x>900 and mob.rect.y<64 and now_VIDA - last_update_VIDA >=1000 :
+            VIDA-=1
+            if VIDA==0:
+                running=False
+                
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
             
