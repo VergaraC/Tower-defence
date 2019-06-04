@@ -312,7 +312,8 @@ try:
             mob2=Mob()
             all_sprites.add(mob2)
             mobg.add(mob2)
-        
+            all_sprites.add(mob2)
+            mobg.add(mob2)
         #Spawn constante
         now2 = pygame.time.get_ticks()
             
