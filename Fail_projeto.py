@@ -2,6 +2,7 @@
 
 
 
+
 # -*- coding: utf-8 -*-
 
 # Importando as bibliotecas necessárias.
@@ -44,7 +45,8 @@ class Mob(pygame.sprite.Sprite):
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
             # Detalhes sobre o posicionamento.
-            self.image = pygame.image.load("Mob.png").convert()
+            self.image= pygame.transform.scale(pygame.image.load("sharingan.png"), [64,48])
+            self.image.set_colorkey(WHITE)
             
             self.rect = self.image.get_rect()
             #self.image.set_colorkey(BLACK)
@@ -124,7 +126,7 @@ class Torre(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        torre_img = pygame.image.load(path.join( "torre.png")).convert()
+        torre_img = pygame.transform.scale(pygame.image.load("naruto.png"), [64,64])
         self.image = torre_img
         self.rect = self.image.get_rect()
         
@@ -171,7 +173,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("Bala.png"), [16,16])
+        bullet_img = pygame.transform.scale(pygame.image.load("rasengan.png"), [58,58])
         self.image = bullet_img
         
         # Deixando transparente.
@@ -195,16 +197,16 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,1,0,0,0,0,3,2,4],
-      [1,0,2,0,1,2,0,2,3,4],
-      [0,0,3,0,0,3,0,4,4,4],
-      [0,2,3,2,0,1,0,1,1,4],
+Mapa=[[0,0,1,0,0,0,0,2,2,2],
+      [1,0,2,0,1,2,0,2,2,2],
+      [0,0,3,0,0,2,0,2,2,2],
+      [0,2,3,2,0,2,0,2,2,2],
       [0,0,2,0,0,2,0,2,0,0],
-      [1,0,3,0,2,3,0,4,0,4],
-      [1,0,2,0,3,0,0,1,0,4],
-      [2,0,0,0,2,0,4,0,0,4],
-      [1,2,2,2,3,0,1,0,1,4],
-      [2,1,2,2,4,0,0,0,2,4]]
+      [1,0,3,0,2,2,0,4,0,4],
+      [1,0,2,0,2,0,0,1,0,4],
+      [1,0,0,0,2,0,4,0,0,4],
+      [1,1,1,2,2,0,4,0,1,4],
+      [1,1,1,1,1,0,0,0,1,4]]
 
 
 YY=len(Mapa)
@@ -215,11 +217,11 @@ imgX=64
 imgY=64
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-agua = pygame.transform.scale(pygame.image.load("agua.png"), [ imgX,imgY])
-chao = pygame.transform.scale(pygame.image.load("chao.png"), [imgX,imgY])
-percurso = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
+agua = pygame.transform.scale(pygame.image.load("water.png"), [ imgX,imgY])
+chao = pygame.transform.scale(pygame.image.load("grass.png"), [imgX,imgY])
+percurso = pygame.transform.scale(pygame.image.load("floor.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
-casa= pygame.transform.scale(pygame.image.load("casa.png"), [imgX,imgY])
+casa= pygame.transform.scale(pygame.image.load("wall.png"), [imgX,imgY])
 
 Terrenos={
         0:percurso,
@@ -280,7 +282,7 @@ try:
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
                 now_torre = pygame.time.get_ticks()
-                if event.key == pygame.K_1  and now_torre - last_update_torre >=3000 or torre2==[]:
+                if event.key == pygame.K_1  and now_torre - last_update_torre >= 2500 or torre2==[]:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
@@ -299,7 +301,9 @@ try:
                     torre.dy= torre.rect.centery - torre.alvo[1]
         #Morte e Respawn
         all_sprites.update()
-        mob.image = pygame.image.load("Mob.png").convert()
+
+        mob.image= pygame.transform.scale(pygame.image.load("sharingan.png"), [64,48])
+        mob.image.set_colorkey(WHITE)
         hits = pygame.sprite.groupcollide(mobg, bullets, True, True)
         for hit in hits:
             mob2=Mob()
@@ -328,3 +332,4 @@ try:
         
 finally:
     pygame.quit()
+

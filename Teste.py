@@ -13,7 +13,7 @@ import time
 
 
 # Dados gerais do jogo.
-WIDTH = 640 # Largura da tela
+WIDTH = 960 # Largura da tela
 HEIGHT = 640 # Altura da tela
 FPS = 15 # Frames por segundo
 
@@ -112,6 +112,7 @@ class Mob(pygame.sprite.Sprite):
                    self.linha=self.linha-1
                    self.prox_linha-=1
                    self.dy=0
+                   
                
 
 # Classe Jogador que representa a nave
@@ -197,16 +198,16 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,1,0,0,0,0,2,2,2],
-      [1,0,2,0,1,2,0,2,2,2],
-      [0,0,3,0,0,2,0,2,2,2],
-      [0,2,3,2,0,2,0,2,2,2],
-      [0,0,2,0,0,2,0,2,0,0],
-      [1,0,3,0,2,2,0,4,0,4],
-      [1,0,2,0,2,0,0,1,0,4],
-      [1,0,0,0,2,0,4,0,0,4],
-      [1,1,1,2,2,0,4,0,1,4],
-      [1,1,1,1,1,0,0,0,1,4]]
+Mapa=[[0,0,1,0,0,0,0,2,2,0,0,0,0,0,4],
+      [1,0,2,0,1,2,0,2,2,0,1,1,1,0,0],
+      [0,0,2,0,0,2,0,2,2,0,0,0,0,4,4],
+      [0,2,2,2,0,2,0,2,2,2,1,1,0,4,4],
+      [0,0,2,0,0,2,0,2,0,0,0,1,0,4,4],
+      [1,0,2,0,2,2,0,4,0,4,0,1,0,4,4],
+      [1,0,2,0,2,0,0,4,0,4,0,1,0,4,4],
+      [1,0,0,0,2,0,4,0,0,4,0,1,0,4,4],
+      [1,1,1,2,2,0,4,0,1,4,0,1,0,4,4],
+      [1,1,1,1,1,0,0,0,1,4,0,0,0,4,4]]
 
 
 YY=len(Mapa)
@@ -220,6 +221,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 agua = pygame.transform.scale(pygame.image.load("water.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("grass.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("floor.png"), [imgX,imgY])
+percurso2 = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
 casa= pygame.transform.scale(pygame.image.load("wall.png"), [imgX,imgY])
 
@@ -228,7 +230,8 @@ Terrenos={
         1:chao,
         2:agua ,
         3:flor,
-        4:casa
+        4:casa,
+        5:percurso2
         }
 
 
@@ -282,7 +285,7 @@ try:
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
                 now_torre = pygame.time.get_ticks()
-                if event.key == pygame.K_1  and now_torre - last_update_torre >= 3000 or torre2==[]:
+                if event.key == pygame.K_1  and now_torre - last_update_torre >= 3500 or torre2==[]:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
