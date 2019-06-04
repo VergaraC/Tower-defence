@@ -269,11 +269,13 @@ try:
     running = True
     last_update2 = pygame.time.get_ticks()
     last_update_torre = pygame.time.get_ticks()
+    last_update_VIDA = pygame.time.get_ticks()
     while running:
         
         # Ajusta a velocidade do jogo.
-        clock.tick(FPS)
-        while mob.rect.x>586 and mob.rect.y> 256:
+        clock.tick(FPS) 
+        now_VIDA = pygame.time.get_ticks()
+        if mob.rect.x>586 and mob.rect.y> 256 and now_VIDA - last_update_VIDA >=1000 :
             VIDA-=1
             if VIDA==0:
                 running=False
