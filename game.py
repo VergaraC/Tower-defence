@@ -267,6 +267,7 @@ background_rect = background.get_rect()
 mob=Mob()
 mobg=pygame.sprite.Group()
 mobg.add(mob)
+PONTOS=0
 # Cria um grupo de sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
@@ -289,7 +290,13 @@ for center in listaCenterCoracao:
 inicio= pygame.transform.scale(pygame.image.load("Tela de início.png"), [WIDTH,HEIGHT])
 inicio_rect=inicio.get_rect()
 
-screen=pygame.display.set_mode((WIDTH,HEIGHT))  
+screen=pygame.display.set_mode((WIDTH,HEIGHT)) 
+
+font = pygame.font.Font("C:\Windows\Fonts\Arial.ttf", 32)
+text = font.render("Uchiha mortos: {0}".format(PONTOS), True, YELLOW)
+textRect = text.get_rect()
+textRect.center = (100, 50)
+ 
 # Comando para evitar travamentos.
 try:
     
@@ -318,7 +325,7 @@ try:
         
         
     while running:
-        
+        screen.blit(text, textRect)
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
@@ -358,6 +365,7 @@ try:
                     torre.d=math.sqrt(torre.alvo[0]*2 + torre.alvo[1]*2)
                     torre.dx= torre.rect.centerx - torre.alvo[0]
                     torre.dy= torre.rect.centery - torre.alvo[1]
+                    
         #Morte e Respawn
         all_sprites.update()
 
@@ -368,7 +376,10 @@ try:
             mob2=Mob()
             all_sprites.add(mob2)
             mobg.add(mob2)
-        
+            PONTOS+=1
+        text = font.render("Uchiha mortos: {0}".format(PONTOS), True, YELLOW)
+        textRect = text.get_rect()
+        textRect.center = (100, 50)
         #Spawn constante
         now2 = pygame.time.get_ticks()
             
@@ -382,6 +393,7 @@ try:
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
+        
         tiles.draw(screen)
         all_sprites.draw(screen)
         
