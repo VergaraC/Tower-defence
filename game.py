@@ -295,7 +295,7 @@ screen=pygame.display.set_mode((WIDTH,HEIGHT))
 font = pygame.font.Font("C:\Windows\Fonts\Arial.ttf", 32)
 text = font.render("Uchiha mortos: {0}".format(PONTOS), True, YELLOW)
 textRect = text.get_rect()
-textRect.center = (100, 50)
+textRect.center = (WIDTH/2 - 32*10, 50)
  
 # Comando para evitar travamentos.
 try:
