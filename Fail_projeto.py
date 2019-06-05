@@ -13,10 +13,12 @@ import time
 
 
 # Dados gerais do jogo.
-WIDTH = 640 # Largura da tela
+WIDTH = 960 # Largura da tela
 HEIGHT = 640 # Altura da tela
-FPS = 15 # Frames por segundo
+FPS = 35 # Frames por segundo
 
+VIDA=18
+VIDA2=VIDA
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -51,9 +53,9 @@ class Mob(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             #self.image.set_colorkey(BLACK)
             # Sorteia um lugar inicial em x
-            self.rect.x = 16
+            self.rect.centerx = 16
             # Sorteia um lugar inicial em y
-            self.rect.y = 16
+            self.rect.centery = 16
             # Sorteia uma velocidade inicial
             self.speedx = 4
             self.speedy = 4
@@ -66,13 +68,15 @@ class Mob(pygame.sprite.Sprite):
             self.linha_anterior=0
             self.coluna_anterior=0
             
+        
+            
         def update(self):
             
             
                    
            if self.linha<len(Mapa) and self.prox_col<len(Mapa[self.linha]) and Mapa[self.linha][self.prox_col]==0 and self.prox_col!=self.coluna_anterior:
-               self.rect.x+=self.speedx
-               self.rect.y+=0
+               self.rect.centerx+=self.speedx
+               self.rect.centery+=0
                self.dx+=self.speedx
                if self.dx>=64:
                    self.linha_anterior=self.linha
@@ -112,9 +116,22 @@ class Mob(pygame.sprite.Sprite):
                    self.linha=self.linha-1
                    self.prox_linha-=1
                    self.dy=0
+          
                
+class Coração(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.transform.scale(pygame.image.load("Coração.png"), [64,64]).convert_alpha()
+        self.image.set_colorkey(BLACK)
+        self.rect=self.image.get_rect()
+        self.rect.centerx= x
+        self.rect.centery= y
 
-# Classe Jogador que representa a nave
+listaCenterCoracao=[
+(WIDTH-32*3,64*1 + 32), (WIDTH-32*3,64*2 + 32), (WIDTH-32*3,64*3 + 32), (WIDTH-32*3,64*4 + 32),  (WIDTH-32*3,64*5 + 32), (WIDTH-32*3,64*6 + 32), (WIDTH-32*3,64*7 + 32), (WIDTH-32*3,64*8 + 32), (WIDTH-32*3,64*9 + 32), 
+(WIDTH-32,64*1 +32),(WIDTH-32,64*2 +32),(WIDTH-32,64*3 +32),(WIDTH-32,64*4 +32),(WIDTH-32,64*5+ 32),(WIDTH-32,64*6 + 32),(WIDTH-32,64*7 + 32),(WIDTH-32,64*8 + 32),(WIDTH-32,64*9 + 32) ]
+
+
 class Torre(pygame.sprite.Sprite):
     
     
@@ -173,7 +190,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("rasengan.png"), [58,58])
+        bullet_img = pygame.transform.scale(pygame.image.load("rasengan.png"), [40,40])
         self.image = bullet_img
         
         # Deixando transparente.
@@ -197,16 +214,16 @@ pygame.init()
 pygame.mixer.init()
 
 
-Mapa=[[0,0,1,0,0,0,0,2,2,2],
-      [1,0,2,0,1,2,0,2,2,2],
-      [0,0,3,0,0,2,0,2,2,2],
-      [0,2,3,2,0,2,0,2,2,2],
-      [0,0,2,0,0,2,0,2,0,0],
-      [1,0,3,0,2,2,0,4,0,4],
-      [1,0,2,0,2,0,0,1,0,4],
-      [1,0,0,0,2,0,4,0,0,4],
-      [1,1,1,2,2,0,4,0,1,4],
-      [1,1,1,1,1,0,0,0,1,4]]
+Mapa=[[0,0,1,0,0,0,0,2,2,0,0,0,0,0,0],
+      [1,0,2,0,1,2,0,2,2,0,1,1,1,4,4],
+      [0,0,2,0,0,2,0,2,2,0,0,0,0,4,4],
+      [0,2,2,2,0,2,0,2,2,2,1,1,0,4,4],
+      [0,0,2,0,0,2,0,2,0,0,0,0,0,4,4],
+      [1,0,2,0,2,2,0,4,0,4,2,1,2,4,4],
+      [1,0,2,0,2,0,0,4,0,4,2,1,1,4,4],
+      [1,0,0,0,2,0,4,0,0,4,2,1,1,4,4],
+      [1,1,1,2,2,0,4,0,1,4,2,1,2,4,4],
+      [1,1,1,1,1,0,0,0,1,4,2,2,2,4,4]]
 
 
 YY=len(Mapa)
@@ -220,6 +237,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 agua = pygame.transform.scale(pygame.image.load("water.png"), [ imgX,imgY])
 chao = pygame.transform.scale(pygame.image.load("grass.png"), [imgX,imgY])
 percurso = pygame.transform.scale(pygame.image.load("floor.png"), [imgX,imgY])
+percurso2 = pygame.transform.scale(pygame.image.load("percurso.png"), [imgX,imgY])
 flor= pygame.transform.scale(pygame.image.load("flor.png"), [imgX,imgY])
 casa= pygame.transform.scale(pygame.image.load("wall.png"), [imgX,imgY])
 
@@ -228,7 +246,8 @@ Terrenos={
         1:chao,
         2:agua ,
         3:flor,
-        4:casa
+        4:casa,
+        5:percurso2
         }
 
 
@@ -252,6 +271,7 @@ mobg.add(mob)
 all_sprites = pygame.sprite.Group()
 bullets= pygame.sprite.Group()
 torre2=[]
+coração=pygame.sprite.Group()
 #all_sprites.add(torre)
 all_sprites.add(mob)
 
@@ -260,19 +280,58 @@ for linha in range(len(Mapa)):
     for coluna in range(len(Mapa[linha])):
         terreno=Terreno(Mapa[linha][coluna],linha,coluna)
         tiles.add(terreno)
+for center in listaCenterCoracao:
+    c=Coração(*center)
+    all_sprites.add(c)
+    coração.add(c)
+    
+    
+inicio= pygame.transform.scale(pygame.image.load("Tela de início.png"), [WIDTH,HEIGHT])
+inicio_rect=inicio.get_rect()
 
+screen=pygame.display.set_mode((WIDTH,HEIGHT))  
 # Comando para evitar travamentos.
 try:
     
     # Loop principal.
     running = True
+    tela=True
     last_update2 = pygame.time.get_ticks()
     last_update_torre = pygame.time.get_ticks()
+    last_update_VIDA = pygame.time.get_ticks()
+
+    while tela:
+        clock.tick(FPS)
+        screen.fill(BLACK)
+        screen.blit(inicio,inicio_rect)
+        pygame.display.flip()
+        
+        for event in pygame.event.get():
+            
+            # Verifica se foi fechado
+            if event.type == pygame.QUIT:
+                
+                running=False
+                tela = False
+            if event.type == pygame.KEYDOWN:
+                tela=False
+        
+        
     while running:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
+        for mob in mobg:
+            if mob.rect.x>WIDTH -64 - 32 :
+                VIDA-=1
+                mob.kill()
+                if VIDA==0:
+                    running=False
+        for cor in coração:
+            if VIDA<VIDA2:
+                VIDA2 -=1
+                cor.kill()
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
             
@@ -282,7 +341,7 @@ try:
             if event.type == pygame.KEYDOWN:
                     # Dependendo da tecla, altera a velocidade.
                 now_torre = pygame.time.get_ticks()
-                if event.key == pygame.K_1  and now_torre - last_update_torre >= 2500 or torre2==[]:
+                if event.key == pygame.K_1  and now_torre - last_update_torre >= 3000 or torre2==[]:
                     x=pygame.mouse.get_pos()[0]
                     y=pygame.mouse.get_pos()[1]
                     torre1=Torre(x,y,all_sprites,bullets)
