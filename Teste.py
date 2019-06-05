@@ -15,7 +15,7 @@ import time
 # Dados gerais do jogo.
 WIDTH = 960 # Largura da tela
 HEIGHT = 640 # Altura da tela
-FPS = 150 # Frames por segundo
+FPS = 35 # Frames por segundo
 
 VIDA=5
 
