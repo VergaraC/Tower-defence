@@ -190,7 +190,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        bullet_img = pygame.transform.scale(pygame.image.load("rasengan.png"), [58,58])
+        bullet_img = pygame.transform.scale(pygame.image.load("rasengan.png"), [40,40])
         self.image = bullet_img
         
         # Deixando transparente.
@@ -284,14 +284,39 @@ for center in listaCenterCoracao:
     c=Coração(*center)
     all_sprites.add(c)
     coração.add(c)
+    
+    
+inicio= pygame.transform.scale(pygame.image.load("Tela de início.png"), [WIDTH,HEIGHT])
+inicio_rect=inicio.get_rect()
+
+screen=pygame.display.set_mode((WIDTH,HEIGHT))  
 # Comando para evitar travamentos.
 try:
     
     # Loop principal.
     running = True
+    tela=True
     last_update2 = pygame.time.get_ticks()
     last_update_torre = pygame.time.get_ticks()
     last_update_VIDA = pygame.time.get_ticks()
+
+    while tela:
+        clock.tick(FPS)
+        screen.fill(BLACK)
+        screen.blit(inicio,inicio_rect)
+        pygame.display.flip()
+        
+        for event in pygame.event.get():
+            
+            # Verifica se foi fechado
+            if event.type == pygame.QUIT:
+                
+                running=False
+                tela = False
+            if event.type == pygame.KEYDOWN:
+                tela=False
+        
+        
     while running:
         
         # Ajusta a velocidade do jogo.
