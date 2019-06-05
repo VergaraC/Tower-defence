@@ -290,6 +290,9 @@ for center in listaCenterCoracao:
 inicio= pygame.transform.scale(pygame.image.load("Tela de início.png"), [WIDTH,HEIGHT])
 inicio_rect=inicio.get_rect()
 
+final= pygame.transform.scale(pygame.image.load("Tela final.png"), [WIDTH,HEIGHT])
+final_rect=final.get_rect()
+
 screen=pygame.display.set_mode((WIDTH,HEIGHT)) 
 
 font = pygame.font.Font("C:\Windows\Fonts\Arial.ttf", 32)
@@ -302,12 +305,13 @@ try:
     
     # Loop principal.
     running = True
-    tela=True
+    tela_inicio=True
+    tela_final=True
     last_update2 = pygame.time.get_ticks()
     last_update_torre = pygame.time.get_ticks()
     last_update_VIDA = pygame.time.get_ticks()
 
-    while tela:
+    while tela_inicio:
         clock.tick(FPS)
         screen.fill(BLACK)
         screen.blit(inicio,inicio_rect)
@@ -319,9 +323,10 @@ try:
             if event.type == pygame.QUIT:
                 
                 running=False
-                tela = False
+                tela_inicio = False
+                tela_final=False
             if event.type == pygame.KEYDOWN:
-                tela=False
+                tela_inicio=False
         
         
     while running:
@@ -400,7 +405,23 @@ try:
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
+    while tela_final:
+        clock.tick(FPS)
+        screen.fill(BLACK)
+        screen.blit(final,final_rect)
+        pygame.display.flip()
         
+        for event in pygame.event.get():
+            
+            # Verifica se foi fechado
+            if event.type == pygame.QUIT:
+                
+                running=False
+                tela_inicio = False
+                tela_final=False
+            if event.type == pygame.KEYDOWN:
+                tela_final=False
+                
 finally:
     pygame.quit()
 
